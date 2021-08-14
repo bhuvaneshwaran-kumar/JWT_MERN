@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
+import { baseURL } from '../utils/authFetch'
 function SignupPage() {
   const history = useHistory();
 
@@ -20,6 +20,29 @@ function SignupPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    const payload = { username, password, email }
+    try {
+      const response = await fetch(`${baseURL}/api/auth/signup`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      })
+
+      const { ok, message, data } = await response.json()
+      setPassword("")
+      if (!ok) {
+        return setError(message)
+      }
+      setEmail('')
+      setPassword('')
+      setError('Account created... now you can login')
+    } catch (err) {
+      console.error('Error while signing up', err)
+    }
   };
 
   return (

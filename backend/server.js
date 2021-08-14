@@ -3,10 +3,11 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
+const authRoutes = require('./routes/auth')
 
 
 const { CORS_ORIGIN, MONGO_DB_URL, PORT } = require('./constants')
-console.log(PORT)
+
 const main = async () => {
     await mongoose.connect(MONGO_DB_URL, {
         useNewUrlParser: true,
@@ -28,7 +29,9 @@ const main = async () => {
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
 
-    app.get("/", (_, res) => res.send('Hello World...!'))
+    app.get("/", (_, res) => res.json('Hello World...!'))
+
+    app.use("/api/auth", authRoutes)
 
     app.listen(PORT, () => console.log(`URL: http://localhost:${PORT}`))
 }
