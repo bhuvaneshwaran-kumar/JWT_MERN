@@ -12,7 +12,7 @@ export const authFetch = async (url, options = {}) => {
                 method: 'POST',
                 credentials: 'include'
             })
-            const { ok, message, data } = response.json()
+            const { ok, message, data } = await response.json()
             if (!ok) {
                 console.log(message)
                 alert('some thing went wrong try loggind in again')

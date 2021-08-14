@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { authFetch, baseURL } from '../utils/authFetch'
+import { baseURL } from '../utils/authFetch'
 
 
 function Nav() {

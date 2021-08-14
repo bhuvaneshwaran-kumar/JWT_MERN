@@ -5,14 +5,19 @@ const Router = express.Router()
 
 const { verifyAccessToken, sendRefreshTokenAsCookie, createTokens,
     revokeRefreshTokens, verifyRefreshToken } = require('../utils/token')
+const isAuthenticated = require('../utils/middlewares')
 const { COOKIE_NAME } = require('../constants')
 
-
+Router.get('/random', isAuthenticated, (req, res) => {
+    const randomNumber = Math.floor(Math.random() * 1000)
+    return res.json({ ok: true, message: `hello ${req?.user?.username} you got ${randomNumber}` })
+})
 
 // verify the refresh token from cookie
 // return user,accessToken (sets new refreshToken in res as a cookie)
 Router.post('/refresh', async (req, res) => {
     const token = req.cookies[COOKIE_NAME]
+
     if (!token) {
         return res.json({
             ok: false,
@@ -115,6 +120,8 @@ Router.post('/login', async (req, res) => {
     }
 })
 
+// LOG OUT 
+// set empty refreshTocken to the Client device.
 Router.post('/logout', async (req, res) => {
     try {
         await sendRefreshTokenAsCookie(res, '')
