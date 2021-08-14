@@ -16,7 +16,7 @@ function LoginPage() {
 
   useLayoutEffect(() => {
     if (!loading) return;
-    if (auth.user) {
+    if (auth?.user) {
       history.push("/");
     } else {
       setLoading(false);
@@ -46,7 +46,7 @@ function LoginPage() {
       setAuth(data)
       setAccessToken(data.accessToken)
 
-      // redirects to what page did user tries to see first
+      // redirects to what page did user tries to see first.
       const search = location.search
       if (search) {
         const next = search.split('next=')[1] || '/'

@@ -20,7 +20,7 @@ Router.post('/refresh', async (req, res) => {
         })
     }
 
-    const payload = verifyRefreshToken(token)
+    const payload = await verifyRefreshToken(token)
     if (!payload) {
         return res.json({
             ok: false,
@@ -37,7 +37,7 @@ Router.post('/refresh', async (req, res) => {
         return res.json({ ok: false, message: 'Invalid Token' })
     }
 
-    const { accessToken, refreshToken } = await createTokens()
+    const { accessToken, refreshToken } = await createTokens(user)
     sendRefreshTokenAsCookie(res, refreshToken)
 
     const { username, email, _id } = user
@@ -102,7 +102,6 @@ Router.post('/login', async (req, res) => {
         const { accessToken, refreshToken } = await createTokens(user)
         await sendRefreshTokenAsCookie(res, refreshToken)
 
-
         const { username, email, _id } = user
 
         res.json({
@@ -114,6 +113,21 @@ Router.post('/login', async (req, res) => {
     catch (err) {
         console.log(`Error while logging in: ${err.message}`)
     }
+})
+
+Router.post('/logout', async (req, res) => {
+    try {
+        await sendRefreshTokenAsCookie(res, '')
+        res.json({
+            ok: true,
+            message: 'successfully Logged out'
+        })
+    } catch (err) {
+        res.json({
+            ok: false, message: 'Ooops error occured.'
+        })
+    }
+
 })
 
 
